@@ -4,7 +4,7 @@
   <img src="mascot.png" alt="YAK RNA Mascot" width="200"/>
 </p>
 
-An RNA designer powered by discrete diffusion. Generate RNA sequences conditioned on secondary structure, consensus sequences, or GO terms.
+An RNA designer. Generate RNA sequences conditioned on nothing or a combination of secondary structure, consensus sequences, or gene ontology terms
 
 ## Features
 
@@ -187,7 +187,7 @@ If you use YAK RNA in your research, please cite:
 @software{yakrna2025,
   author = {Khan, Yousuf},
   title = {YAK RNA: An RNA Designer},
-  year = {2025},
+  year = {2026},
   url = {https://github.com/YousufAKhan/yakRNA}
 }
 ```
