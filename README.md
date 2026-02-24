@@ -151,7 +151,7 @@ python inference/rna_sequence_generator.py \
 yakRNA/
 ├── inference/
 │   ├── rna_sequence_generator.py   # Main generation script
-│   └── discrete_diffusion.py       # Diffusion components
+│   └── discrete_diffusion.py       # Generation components
 ├── configs/
 │   └── inference.yaml              # Model config
 ├── training_data/processed/vocabulary_analysis/
