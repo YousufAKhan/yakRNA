@@ -83,6 +83,28 @@ python inference/rna_sequence_generator.py \
     --num_sequences 10
 ```
 
+## Base-Pairing Constraints
+
+When generating with secondary structure, you can enforce base-pairing rules using `--constraint_set`:
+
+| Constraint Set | Allowed Base Pairs | Description |
+|----------------|-------------------|-------------|
+| `strict` | A:U, U:A, G:C, C:G | Watson-Crick pairs only |
+| `canonical` | A:U, U:A, G:C, C:G, G:U, U:G | Watson-Crick + wobble pairs |
+| `canonical+sheared` | canonical + G:A, A:G | Adds sheared G:A pairs |
+| `canonical+common` | canonical+sheared + A:C, C:A | Adds common non-canonical pairs |
+| `permissive` | canonical+common + U:C, C:U | Most permissive set |
+
+Example:
+```bash
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --secondary_structure "((((....))))" \
+    --constraint_set canonical \
+    --num_sequences 5
+```
+
 ## Project Structure
 
 ```
