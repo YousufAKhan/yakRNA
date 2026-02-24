@@ -1296,7 +1296,7 @@ Maximum sequence length: 640 nucleotides
                        help='Nucleus sampling: only consider tokens with cumulative probability <= p')
     parser.add_argument('--constraint_set', type=str,
                        choices=['strict', 'canonical', 'canonical+sheared', 'canonical+common', 'permissive'],
-                       help='Apply base-pair constraints (optional; defaults to unconstrained)')
+                       help='Apply base-pair constraints (defaults to canonical when --secondary_structure is provided)')
     
     # Output arguments
     parser.add_argument('--output', type=str, 
@@ -1343,11 +1343,16 @@ Maximum sequence length: 640 nucleotides
     if final_length and final_length > 640:
         parser.error("Maximum sequence length is 640 nucleotides")
     
-    # Initialize generator (constrained if requested)
+    # Initialize generator (constrained if structure provided)
+    # Default to canonical constraints when secondary_structure is given
     logger.info("Initializing RNA sequence generator...")
-    if args.constraint_set:
+    constraint_set = args.constraint_set
+    if args.secondary_structure and not constraint_set:
+        constraint_set = "canonical"
+
+    if constraint_set:
         generator = ConstrainedRNASequenceGenerator(
-            args.config, args.checkpoint, device=args.device, constraint_set=args.constraint_set
+            args.config, args.checkpoint, device=args.device, constraint_set=constraint_set
         )
     else:
         generator = RNASequenceGenerator(args.config, args.checkpoint, device=args.device)

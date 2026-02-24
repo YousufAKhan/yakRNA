@@ -85,7 +85,7 @@ python inference/rna_sequence_generator.py \
 
 ## Base-Pairing Constraints
 
-When generating with secondary structure, you can enforce base-pairing rules using `--constraint_set`:
+When generating with secondary structure (`--secondary_structure`), base-pairing constraints are automatically applied using the `canonical` set by default. You can override this with `--constraint_set`:
 
 | Constraint Set | Allowed Base Pairs | Description |
 |----------------|-------------------|-------------|
