@@ -1,6 +1,6 @@
-# YAK RNA: RNA Sequence Generation
+# YAK RNA: An RNA Designer
 
-A discrete diffusion model for conditional RNA sequence generation. Generate RNA sequences conditioned on secondary structure, consensus sequences, or GO terms.
+An RNA designer powered by discrete diffusion. Generate RNA sequences conditioned on secondary structure, consensus sequences, or GO terms.
 
 ## Features
 
@@ -182,7 +182,7 @@ If you use YAK RNA in your research, please cite:
 ```bibtex
 @software{yakrna2025,
   author = {Khan, Yousuf},
-  title = {YAK RNA: Discrete Diffusion for RNA Sequence Generation},
+  title = {YAK RNA: An RNA Designer},
   year = {2025},
   url = {https://github.com/YousufAKhan/yakRNA}
 }
