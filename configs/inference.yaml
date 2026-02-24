@@ -1,0 +1,42 @@
+data_files:
+  vocabulary_file: "training_data/processed/vocabulary_analysis/unified_vocabulary.json"
+
+device: "cuda"
+
+model_architecture:
+  model_size:
+    num_hidden_layers: 12
+    hidden_size: 768
+    num_attention_heads: 12
+    intermediate_size: 3072
+
+optimizations:
+  flash_attention:
+    enabled: True
+    version: 2
+  memory:
+    gradient_checkpointing: true
+    use_cache: true
+  xformers:
+    enabled: true
+    attention_op: "cutlass"
+  mixed_precision:
+    enabled: true
+    precision: "bf16"
+
+training:
+  dropout:
+    attention_dropout: 0.15
+    hidden_dropout: 0.15
+  diffusion:
+    num_timesteps: 100
+    cumulative_masking:
+      target_percentage: 0.9
+      schedule_type: "cosine"
+      initial_rate: 0.0
+    loss_type: "cross-entropy"
+    sequence_loss_weight: 1.0
+    modality_dropout_rates:
+      ss: 0.5
+      consensus: 0.5
+      go_terms: 0.5

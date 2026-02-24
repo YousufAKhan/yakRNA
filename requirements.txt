@@ -1,0 +1,29 @@
+# Core ML Libraries
+torch==2.1.0+cu121
+transformers==4.54.1
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.11.2
+scikit-learn==1.7.1
+
+# Visualization
+matplotlib==3.10.3
+seaborn==0.13.2
+
+# Utilities
+tqdm==4.67.1
+pyyaml==6.0
+h5py==3.14.0
+
+# Experiment Tracking
+wandb==0.21.0
+
+# Modern Optimizations
+flash-attn==2.5.8
+xformers==0.0.22.post7
+triton==2.1.0
+
+# Additional Libraries
+accelerate==1.9.0
+evaluate==0.4.5
+biopython==1.85 

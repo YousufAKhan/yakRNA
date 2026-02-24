@@ -1,0 +1,29 @@
+# YAK RNA Environment - Linux with CUDA 12.1
+# For macOS / CPU, use environment.yml
+
+name: yakrna
+channels:
+  - conda-forge
+  - pytorch
+  - nvidia
+dependencies:
+  - python=3.10
+  - pytorch=2.1.0
+  - pytorch-cuda=12.1
+  - numpy=1.26.4
+  - pandas=2.2.2
+  - scipy=1.11.2
+  - scikit-learn=1.7.1
+  - matplotlib=3.10.3
+  - seaborn=0.13.2
+  - tqdm=4.67.1
+  - pyyaml=6.0
+  - h5py=3.14.0
+  - pip
+  - pip:
+    - transformers==4.54.1
+    - flash-attn==2.5.8
+    - xformers==0.0.22.post7
+    - triton==2.1.0
+    - accelerate==1.9.0
+    - biopython==1.85
