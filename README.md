@@ -15,7 +15,7 @@ An RNA designer. Generate RNA sequences conditioned on nothing or a combination 
   - Consensus-conditioned
   - GO term-conditioned
   - Sequence infilling
-- **Interactive CLI**: Easy-to-use command-line interface
+- **Command-line interface**: Easy-to-use CLI for batch generation
 
 ## Installation
 
@@ -62,11 +62,6 @@ python inference/rna_sequence_generator.py \
     --checkpoint path/to/model.pt \
     --num_sequences 10 \
     --length 100
-
-# Interactive mode
-python inference/interactive_generator.py \
-    --config configs/inference.yaml \
-    --checkpoint path/to/model.pt
 ```
 
 ### Generation Options
@@ -156,7 +151,6 @@ python inference/rna_sequence_generator.py \
 yakRNA/
 ├── inference/
 │   ├── rna_sequence_generator.py   # Main generation script
-│   ├── interactive_generator.py    # Interactive CLI
 │   └── discrete_diffusion.py       # Diffusion components
 ├── configs/
 │   └── inference.yaml              # Model config
