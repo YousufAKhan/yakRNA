@@ -75,11 +75,52 @@ python inference/rna_sequence_generator.py \
     --secondary_structure "((((....))))" \
     --num_sequences 5
 
+# GO term-conditioned generation
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --go_terms "GO:0075523" \
+    --length 80 \
+    --num_sequences 5
+
+# Consensus-conditioned generation
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
+    --num_sequences 5
+
+# Multi-modal: Structure + GO terms
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
+    --go_terms "GO:0075523" \
+    --num_sequences 5
+
+# Multi-modal: Structure + Consensus
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
+    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
+    --num_sequences 5
+
+# All modalities: Structure + Consensus + GO terms
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint path/to/model.pt \
+    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
+    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
+    --go_terms "GO:0075523" \
+    --num_sequences 5
+
 # With temperature control
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
     --checkpoint path/to/model.pt \
     --temperature 0.8 \
+    --length 100 \
     --num_sequences 10
 ```
 
