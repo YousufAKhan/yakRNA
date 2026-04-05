@@ -355,6 +355,7 @@ class RNASequenceGenerator:
         
         if sequence is not None:
             # Encode provided sequence (may contain masks)
+            target_seq_length = len(sequence)  # needed for dropped-modality token counts below
             seq_offset = self.modality_offsets['sequence']
             seq_vocab = self.modality_vocabs['sequence']
             
