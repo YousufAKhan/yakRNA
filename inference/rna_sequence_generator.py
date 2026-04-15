@@ -925,7 +925,7 @@ class ConstrainedRNASequenceGenerator(RNASequenceGenerator):
     """
 
     def __init__(self, config_path: str, checkpoint_path: str, device: str = "auto",
-                 constraint_set: str = "canonical+sheared"):
+                 constraint_set: str = "canonical"):
         super().__init__(config_path, checkpoint_path, device)
 
         self.constraint_set_name = constraint_set
