@@ -68,7 +68,10 @@ PAIR_SETS = {
     'canonical': {'A:U', 'U:A', 'G:C', 'C:G', 'G:U', 'U:G'},
     'canonical+sheared': {'A:U', 'U:A', 'G:C', 'C:G', 'G:U', 'U:G', 'G:A', 'A:G'},
     'canonical+common': {'A:U', 'U:A', 'G:C', 'C:G', 'G:U', 'U:G', 'G:A', 'A:G', 'A:C', 'C:A'},
-    'permissive': {'A:U', 'U:A', 'G:C', 'C:G', 'G:U', 'U:G', 'G:A', 'A:G', 'A:C', 'C:A', 'U:C', 'C:U'}
+    'permissive': {'A:U', 'U:A', 'G:C', 'C:G', 'G:U', 'U:G', 'G:A', 'A:G', 'A:C', 'C:A', 'U:C', 'C:U'},
+    'unconstrained': {
+        f'{a}:{b}' for a in 'AUGC' for b in 'AUGC'
+    }
 }
 
 
@@ -1296,7 +1299,7 @@ Maximum sequence length: 640 nucleotides
     parser.add_argument('--top_p', type=float, 
                        help='Nucleus sampling: only consider tokens with cumulative probability <= p')
     parser.add_argument('--constraint_set', type=str,
-                       choices=['strict', 'canonical', 'canonical+sheared', 'canonical+common', 'permissive'],
+                       choices=['strict', 'canonical', 'canonical+sheared', 'canonical+common', 'permissive', 'unconstrained'],
                        help='Apply base-pair constraints (defaults to canonical when --secondary_structure is provided)')
     
     # Output arguments
