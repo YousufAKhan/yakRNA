@@ -17,6 +17,12 @@ An RNA designer. Generate RNA sequences conditioned on nothing or a combination 
   - Sequence infilling
 - **Command-line interface**: Easy-to-use CLI for batch generation
 
+## Try it in Colab
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/YousufAKhan/yakRNA/blob/main/yakRNA_colab.ipynb)
+
+No installation required — runs in your browser with free GPU access.
+
 ## Installation
 
 ### Option 1: Micromamba/Conda (Recommended)
