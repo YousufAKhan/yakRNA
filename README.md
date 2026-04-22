@@ -51,7 +51,21 @@ pip install -r requirements.txt
 
 ### Download Pre-trained Model
 
-*Instructions coming soon*
+The model weights are hosted on Hugging Face. Download via the CLI:
+
+```bash
+pip install huggingface_hub
+huggingface-cli download MasterYster/yakRNA-Design yakRNA_110M.pt --local-dir checkpoints/
+```
+
+Or in Python:
+
+```python
+from huggingface_hub import hf_hub_download
+hf_hub_download(repo_id="MasterYster/yakRNA-Design", filename="yakRNA_110M.pt", local_dir="checkpoints/")
+```
+
+Model page: https://huggingface.co/MasterYster/yakRNA-Design
 
 ### Generate Sequences
 
@@ -59,7 +73,7 @@ pip install -r requirements.txt
 # Basic generation
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --num_sequences 10 \
     --length 100
 ```
@@ -70,14 +84,14 @@ python inference/rna_sequence_generator.py \
 # Structure-conditioned generation
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --secondary_structure "((((....))))" \
     --num_sequences 5
 
 # GO term-conditioned generation
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --go_terms "GO:0075523" \
     --length 80 \
     --num_sequences 5
@@ -85,14 +99,14 @@ python inference/rna_sequence_generator.py \
 # Consensus-conditioned generation
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
     --num_sequences 5
 
 # Multi-modal: Structure + GO terms
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
     --go_terms "GO:0075523" \
     --num_sequences 5
@@ -100,7 +114,7 @@ python inference/rna_sequence_generator.py \
 # Multi-modal: Structure + Consensus
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
     --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
     --num_sequences 5
@@ -108,7 +122,7 @@ python inference/rna_sequence_generator.py \
 # All modalities: Structure + Consensus + GO terms
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
     --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
     --go_terms "GO:0075523" \
@@ -117,7 +131,7 @@ python inference/rna_sequence_generator.py \
 # With temperature control
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --temperature 0.8 \
     --length 100 \
     --num_sequences 10
@@ -139,7 +153,7 @@ Example:
 ```bash
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
-    --checkpoint path/to/model.pt \
+    --checkpoint checkpoints/yakRNA_110M.pt \
     --secondary_structure "((((....))))" \
     --constraint_set canonical \
     --num_sequences 5
