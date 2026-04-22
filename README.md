@@ -1,4 +1,4 @@
-# YAK RNA: An RNA Designer
+# yakRNA Design: A semantic multimodal RNA composer
 
 <p align="center">
   <img src="mascot.png" alt="YAK RNA Mascot" width="200"/>
