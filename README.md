@@ -61,7 +61,7 @@ The model weights are hosted on Hugging Face. Download via the CLI:
 
 ```bash
 pip install huggingface_hub
-huggingface-cli download MasterYster/yakRNA-Design yakRNA_110M.pt --local-dir checkpoints/
+hf download MasterYster/yakRNA-Design yakRNA_110M.pt --local-dir checkpoints/
 ```
 
 Or in Python:
