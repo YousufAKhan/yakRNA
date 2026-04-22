@@ -84,63 +84,53 @@ python inference/rna_sequence_generator.py \
     --length 100
 ```
 
-### Generation Options
+### Single Modality
 
 ```bash
-# Structure-conditioned generation
+# Unconditional (length-based)
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
     --checkpoint checkpoints/yakRNA_110M.pt \
-    --secondary_structure "((((....))))" \
-    --num_sequences 5
+    --num_sequences 100 \
+    --length 78 \
+    --temperature 1.0 \
+    --fasta_output random_sequences.fasta
 
-# GO term-conditioned generation
+# Secondary structure only
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
     --checkpoint checkpoints/yakRNA_110M.pt \
+    --num_sequences 100 \
+    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>><<<<<<<<<<_________>>>->>>>>>>::::]]]]]::::" \
+    --constraint_set canonical \
+    --temperature 1.0 \
+    --fasta_output ss_prompt.fasta
+
+# GO term only
+python inference/rna_sequence_generator.py \
+    --config configs/inference.yaml \
+    --checkpoint checkpoints/yakRNA_110M.pt \
+    --num_sequences 100 \
     --go_terms "GO:0075523" \
-    --length 80 \
-    --num_sequences 5
+    --length 78 \
+    --temperature 1.0 \
+    --fasta_output go_prompt.fasta
+```
 
-# Consensus-conditioned generation
+### Multimodal
+
+```bash
+# Structure + Consensus + GO terms
 python inference/rna_sequence_generator.py \
     --config configs/inference.yaml \
     --checkpoint checkpoints/yakRNA_110M.pt \
-    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
-    --num_sequences 5
-
-# Multi-modal: Structure + GO terms
-python inference/rna_sequence_generator.py \
-    --config configs/inference.yaml \
-    --checkpoint checkpoints/yakRNA_110M.pt \
-    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
+    --num_sequences 100 \
+    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUGcgacacuGGuucuaaaaCagAugucgUuuuaAGgGCuUUUG" \
     --go_terms "GO:0075523" \
-    --num_sequences 5
-
-# Multi-modal: Structure + Consensus
-python inference/rna_sequence_generator.py \
-    --config configs/inference.yaml \
-    --checkpoint checkpoints/yakRNA_110M.pt \
-    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
-    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
-    --num_sequences 5
-
-# All modalities: Structure + Consensus + GO terms
-python inference/rna_sequence_generator.py \
-    --config configs/inference.yaml \
-    --checkpoint checkpoints/yakRNA_110M.pt \
-    --secondary_structure ":::::::<<<<<<<<<---[[[[[-->>>>>>>>>" \
-    --consensus "GAGUaaGGGGuuCuAGU...gcaGCcCgcCUaGaaCCCUG" \
-    --go_terms "GO:0075523" \
-    --num_sequences 5
-
-# With temperature control
-python inference/rna_sequence_generator.py \
-    --config configs/inference.yaml \
-    --checkpoint checkpoints/yakRNA_110M.pt \
-    --temperature 0.8 \
-    --length 100 \
-    --num_sequences 10
+    --secondary_structure ":::::::<<<<<<<<<-:::--[[[[[-->>>>>>>>><<<<<<<<<<_________>>>->>>>>>>::::]]]]]::::" \
+    --constraint_set canonical \
+    --temperature 1.0 \
+    --fasta_output all_modalities.fasta
 ```
 
 ## Base-Pairing Constraints
