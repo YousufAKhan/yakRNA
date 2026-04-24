@@ -1,7 +1,7 @@
 # yakRNA Design: A semantic multimodal RNA composer
 
 <p align="center">
-  <img src="mascot.png" alt="YAK RNA Mascot" width="200"/>
+  <img src="yakRNA_graphic.png" alt="yakRNA" width="600"/>
 </p>
 
 An RNA designer. Generate RNA sequences conditioned on nothing or a combination of secondary structure, consensus sequences, or gene ontology terms
