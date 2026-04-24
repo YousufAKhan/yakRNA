@@ -185,14 +185,17 @@ MIT License - see [LICENSE](LICENSE)
 
 ## Citation
 
-If you use YAK RNA in your research, please cite:
+If you use yakRNA in your research, please cite:
 
 ```bibtex
-@software{yakrna2025,
-  author = {Khan, Yousuf},
-  title = {YAK RNA: An RNA Designer},
+@article{pinpin2026yakrna,
+  author = {Pinpin, Louie Nathaniel and Khan, Yousuf A.},
+  title = {yakRNA Design: A semantic multimodal RNA composer},
+  journal = {bioRxiv},
   year = {2026},
-  url = {https://github.com/YousufAKhan/yakRNA}
+  doi = {10.64898/2026.04.22.720245},
+  url = {https://doi.org/10.64898/2026.04.22.720245},
+  note = {Preprint}
 }
 ```
 
