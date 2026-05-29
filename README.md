@@ -6,6 +6,8 @@
 
 An RNA designer. Generate RNA sequences conditioned on nothing or a combination of secondary structure, consensus sequences, or gene ontology terms
 
+**Paper**: [yakRNA Design: A semantic multimodal RNA composer](https://www.biorxiv.org/content/10.64898/2026.04.22.720245v1)
+
 ## Features
 
 - **Conditional Generation**: Structure-guided and GO term-conditioned generation
