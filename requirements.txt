@@ -1,29 +1,36 @@
-# Core ML Libraries
-torch==2.1.0+cu121
-transformers==4.54.1
-numpy==1.26.4
-pandas==2.2.2
-scipy==1.11.2
-scikit-learn==1.7.1
+# yakRNA Design - runtime requirements (generation and training).
+#
+# Install a CUDA build of torch FIRST, matched to YOUR DRIVER, e.g. for a
+# CUDA 12.1-12.4 driver:
+#   pip install "torch>=2.1,<2.9" --index-url https://download.pytorch.org/whl/cu121
+# then:
+#   pip install -r requirements.txt
+#
+# Do not just grab the newest torch: current wheels ship CUDA 13 builds that
+# silently fall back to CPU on older drivers (torch.cuda.is_available() -> False).
+#
+# Exact versions behind the released 110M checkpoint, if you want to pin for
+# reproducibility: torch 2.1.0+cu121, transformers 4.54.1, numpy 1.26.4,
+# h5py 3.14.0. The code also runs on current releases (verified on
+# torch 2.5.1/2.7.0 with transformers 4.52 and 5.6).
 
-# Visualization
-matplotlib==3.10.3
-seaborn==0.13.2
+# Core
+torch>=2.1.0
+transformers>=4.48.0,<5.7   # >=4.48 adds ModernBERT; >=5.7 would require torch>=2.6
+numpy>=1.24
+pyyaml>=6.0
+h5py>=3.8
+tqdm>=4.65
 
-# Utilities
-tqdm==4.67.1
-pyyaml==6.0
-h5py==3.14.0
+# Downloading the checkpoint and the semRfam dataset
+huggingface_hub>=0.30.0
 
-# Experiment Tracking
-wandb==0.21.0
+# Optional speedups. Both are probed at startup and the trainer falls back to
+# PyTorch SDPA with a log line if they are absent, so neither is required.
+# Install deliberately, matched to your torch/CUDA build - and note that
+# pinning xformers can silently downgrade torch:
+#   pip install flash-attn --no-build-isolation
+#   pip install xformers
 
-# Modern Optimizations
-flash-attn==2.5.8
-xformers==0.0.22.post7
-triton==2.1.0
-
-# Additional Libraries
-accelerate==1.9.0
-evaluate==0.4.5
-biopython==1.85 
+# Plotting, only for `data_processing/vocabulary.py --visualize`:
+#   pip install matplotlib seaborn

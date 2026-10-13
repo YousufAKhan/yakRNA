@@ -19,6 +19,9 @@ dependencies:
   - h5py
   - pip
   - pip:
-    - transformers
+    # ModernBERT needs >=4.48; <5.7 keeps it compatible with the torch the
+    # conda channels provide (transformers >=5.7 requires torch >=2.6).
+    - transformers>=4.48.0,<5.7
     - accelerate
     - biopython
+    - huggingface_hub>=1.0.0

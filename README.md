@@ -53,7 +53,8 @@ cd yakRNA
 python -m venv venv
 source venv/bin/activate
 
-pip install torch==2.1.0+cu121 --index-url https://download.pytorch.org/whl/cu121
+# pick the CUDA build that matches your driver (cu121, cu124, ...)
+pip install torch --index-url https://download.pytorch.org/whl/cu121
 pip install -r requirements.txt
 ```
 

@@ -22,7 +22,12 @@ dependencies:
   - h5py>=3.8
   - pip
   - pip:
-    - transformers>=4.40.0
+    # Lower bound: ModernBERT was added in transformers 4.48.
+    # Upper bound: transformers >=5.7 calls torch.accelerator, which needs
+    # torch >=2.6, while the pytorch conda channel tops out at 2.5.1 - that
+    # combination makes ModernBertForMaskedLM fail to import outright.
+    # Verified working: torch 2.5.1 + transformers 5.6.0 (and torch 2.7 + 4.52).
+    - transformers>=4.48.0,<5.7
     - accelerate>=0.30.0
     - biopython>=1.83
     - huggingface_hub>=1.0.0
