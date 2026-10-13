@@ -1,0 +1,24 @@
+# Additional requirements for training (inference needs none of these).
+# Install on top of the environment from environment-linux.yml / requirements.txt:
+#   pip install -r requirements-training.txt
+
+# Experiment tracking. Optional: without it the trainer logs every metric to
+# stdout and outputs/training_<timestamp>.log. Set wandb.mode: disabled in the
+# config (or pass --wandb_mode disabled) to keep it installed but silent.
+wandb>=0.17.0
+
+# Optional attention/throughput kernels. The configs request them and the
+# trainer falls back to PyTorch SDPA with a log line when they are absent.
+# Both must match your CUDA and torch versions, so install them deliberately:
+#   pip install flash-attn --no-build-isolation
+#   pip install xformers
+# flash-attn>=2.5.8
+# xformers>=0.0.22
+
+# Needed only by data_processing/vocabulary.py --visualize
+matplotlib>=3.7
+seaborn>=0.12
+
+# Rebuilding the full-region dataset also needs Infernal (cmalign, cmfetch),
+# which is not a Python package:
+#   conda install -c bioconda infernal

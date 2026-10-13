@@ -1,0 +1,135 @@
+# ============================================================================
+# yakRNA Design - smoke test
+#
+# Not a research recipe. A tiny model and a handful of steps, enough to prove
+# that the data pipeline, both training phases, validation, test evaluation and
+# checkpoint writing all work end to end on your machine in a couple of minutes.
+# The resulting checkpoint records its own architecture, so it can be fed
+# straight to inference/rna_sequence_generator.py as a round-trip check.
+#
+# Launch:
+#   python rna_gen/rna_gen_training.py --config configs/train_smoke.yaml
+# ============================================================================
+
+random_seed: 42   # fixed, so a smoke run is reproducible
+
+data_files:
+  h5_file: "training_data/processed/bert_ready_data.h5"
+  vocabulary_file: "training_data/processed/vocabulary_analysis/unified_vocabulary.json"
+  family_splits_file: "training_data/processed/family_splits.json"
+  family_lookup_file: "training_data/processed/family_lookup.json"
+  load_data_into_ram: false
+  temporary_processing_directory: ""
+
+data:
+  max_position_embeddings: 1920
+  max_go_terms: 12
+  train_split: 0.9
+  val_split: 0.05
+  test_split: 0.05
+  use_all_data_for_training: false
+  batch_size: 4
+  num_workers: 2
+  pin_memory: true
+  padding_label_id: -100
+
+device: "auto"    # runs on CPU if no GPU is present (slower, still finishes)
+
+model_architecture:
+  # ~10M parameters - deliberately small.
+  model_size:
+    num_hidden_layers: 4
+    hidden_size: 256
+    num_attention_heads: 4
+    intermediate_size: 1024
+
+optimizations:
+  flash_attention:
+    enabled: false
+  memory:
+    gradient_checkpointing: false
+    use_cache: true
+  xformers:
+    enabled: false
+  mixed_precision:
+    enabled: true
+    precision: "bf16"
+  torch_compile:
+    enabled: false
+  dataloader:
+    persistent_workers: false
+    prefetch_factor: 2
+    drop_last: true
+    timeout: 0
+  distributed:
+    strategy: "ddp"
+
+training:
+  apply_vocab_constraints: true
+  learning_rate: 1e-4
+  dropout:
+    attention_dropout: 0.1
+    hidden_dropout: 0.1
+  validation_freq_steps: 5
+  print_freq: 2
+  max_steps: 10
+  validation_num_samples: 8
+  stale_validation: false
+  model_save_freq_steps: 5
+  accumulate_validation_stats: true
+  eval_on_test: true
+  # Cap the final test-set pass; omit to walk the whole test split.
+  test_num_samples: 16
+  weight_decay: 0.1
+  mixed_precision: true
+  set_kmp_duplicate_lib_ok: false
+  output_dir: outputs/smoke
+  lr_scheduler:
+    type: "linear_warmup"
+    warmup_steps: 2
+  two_phase_training:
+    enabled: true
+    mlm_phase_steps: 5        # steps 0-4 train MLM
+    diffusion_phase_steps: 5  # steps 5-9 train diffusion
+    transition_smooth: true
+  MLM_masking:
+    rate: 0.35
+    span_masking:
+      enabled: true
+      min_span_length: 2
+      max_span_length: 8
+      geometric_p: 0.3
+    modality_dropout_rates:
+      ss: 0.5
+      consensus: 0.5
+      go_terms: 0.5
+  diffusion:
+    num_timesteps: 100
+    cumulative_masking:
+      target_percentage: 0.9
+      schedule_type: "cosine"
+      initial_rate: 0.0
+    loss_type: "cross-entropy"
+    sequence_loss_weight: 1.0
+    modality_dropout_rates:
+      ss: 0.5
+      consensus: 0.5
+      go_terms: 0.5
+    guidance_scale: 1.0
+    random_timestep_sampling: true
+  modality_loss_weights:
+    sequence: 0.85
+    secondary_structure: 0.05
+    consensus: 0.05
+    go_terms: 0.05
+  consensus_case_penalty_factor: 0.5
+
+wandb:
+  project: yakrna-smoke
+  run_name: smoke_test
+  mode: "disabled"   # no W&B account needed
+  log_frequency: 100
+
+checkpoint:
+  resume_from_checkpoint: false
+  checkpoint_prefix: yakRNA_smoke

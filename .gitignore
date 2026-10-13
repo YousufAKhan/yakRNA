@@ -219,3 +219,43 @@ results/
 # Jupyter notebook outputs
 .ipynb_checkpoints/
 
+
+# ---------------------------------------------------------------------------
+# Training data and model artifacts - never commit these.
+#
+# The rules above already keep everything under training_data/ out of git
+# except the small vocabulary files in training_data/processed/vocabulary_analysis/.
+# The patterns below also catch data written outside that directory (e.g. a
+# custom --out-dir / --processed-dir) so a stray multi-GB file cannot be
+# committed by accident.
+#
+# To get the data back:
+#   python data_processing/download_rfam.py --stage prebuilt   # semRfam, ~2.2 GB
+#   python data_processing/download_rfam.py --stage seed-all   # or rebuild locally
+#   hf download MasterYster/yakRNA-Design yakRNA_110M.pt --local-dir checkpoints/
+# ---------------------------------------------------------------------------
+
+# Raw Rfam downloads and per-family alignments
+*.sto
+*.cm
+*.cm.i1*
+*.ssi
+*.fa
+*.fasta
+*.fa.gz
+Rfam.seed*
+Rfam.cm*
+Rfam.fa*
+rfam2go*
+
+# Tokenized dataset and its bulky intermediates (HDF5 is covered by *.h5 above)
+semRfam*.h5
+bert_ready_data.json
+initial_sequence_extraction.json
+family_lookup.json
+family_splits.json
+*_family_splits.json
+GO_mappings.json
+
+# Per-stage failure reports from download_rfam.py
+*_failures.txt

@@ -245,6 +245,20 @@ class RNASequenceGenerator:
             model_config = checkpoint['model_config']
             # Update vocab size to match current vocabulary
             model_config.vocab_size = self.vocab_size
+        elif 'model_config_dict' in checkpoint:
+            # Checkpoints written by rna_gen/rna_gen_training.py record the
+            # architecture as a plain dict, so a model trained with any size
+            # (not just the released 110M one) loads without editing this YAML.
+            logger.info("Using model architecture recorded in checkpoint (model_config_dict)")
+            config_kwargs = dict(checkpoint['model_config_dict'])
+            config_kwargs['vocab_size'] = self.vocab_size
+            dtype_name = config_kwargs.pop('torch_dtype', None)
+            if isinstance(dtype_name, str):
+                config_kwargs['torch_dtype'] = getattr(torch, dtype_name, None)
+            elif dtype_name is not None:
+                config_kwargs['torch_dtype'] = dtype_name
+            config_kwargs['use_cache'] = False
+            model_config = ModernBertConfig(**config_kwargs)
         else:
             logger.info("No model config in checkpoint, creating from inference config")
             # Setup ModernBERT configuration with compatible settings

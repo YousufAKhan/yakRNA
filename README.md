@@ -18,6 +18,8 @@ An RNA designer. Generate RNA sequences conditioned on nothing or a combination 
   - GO term-conditioned
   - Sequence infilling
 - **Command-line interface**: Easy-to-use CLI for batch generation
+- **Full training code**: the two-phase (MLM → discrete diffusion) trainer and
+  the Rfam data pipeline that produced the released model — see [TRAINING.md](TRAINING.md)
 
 ## Try it in Colab
 
@@ -163,16 +165,84 @@ python inference/rna_sequence_generator.py \
 yakRNA/
 ├── inference/
 │   ├── rna_sequence_generator.py   # Main generation script
-│   └── discrete_diffusion.py       # Generation components
+│   └── discrete_diffusion.py       # Diffusion components (shared with training)
+├── rna_gen/
+│   ├── rna_gen_training.py         # Two-phase trainer (MLM → discrete diffusion)
+│   └── metrics_calculator.py       # Per-modality / per-timestep metrics
+├── data_processing/
+│   ├── download_rfam.py            # Fetch Rfam and build per-family alignments
+│   ├── rfam_data_preprocessing.py  # Alignments → tokenizable HDF5
+│   ├── vocabulary.py               # Build the unified multimodal vocabulary
+│   └── training_data_preparation.py# Datasets, family-diverse samplers, masking
 ├── configs/
-│   └── inference.yaml              # Model config
+│   ├── inference.yaml              # Generation config
+│   ├── train_110M.yaml             # The released model's exact training recipe
+│   ├── train_single_gpu.yaml       # Same recipe sized for one GPU
+│   └── train_smoke.yaml            # Tiny end-to-end pipeline check
+├── environment/
+│   └── train_cluster.slurm         # 8-GPU Slurm example
 ├── training_data/processed/vocabulary_analysis/
-│   └── unified_vocabulary.json     # Vocabulary file
+│   └── unified_vocabulary.json     # Vocabulary used by the released model
 ├── environment-macos.yml
 ├── environment-linux.yml
 ├── requirements.txt
+├── requirements-training.txt
+├── TRAINING.md                     # Data pipeline + training guide
 └── README.md
 ```
+
+## Training
+
+The complete training pipeline is included: Rfam download, tokenization, the
+two-phase objective, multi-GPU launch, and resuming or fine-tuning from the
+released checkpoint. [**TRAINING.md**](TRAINING.md) is the full guide; the short
+version is:
+
+From a fresh clone to a training run, with the prebuilt dataset:
+
+```bash
+# 1. training extras (wandb is optional - see TRAINING.md)
+pip install -r requirements-training.txt
+
+# 2. data: download semRfam, the tokenized dataset the released model was
+#    trained on (~2.3 GB) into training_data/processed/
+python data_processing/download_rfam.py --stage prebuilt
+
+# 3. train
+python rna_gen/rna_gen_training.py --config configs/train_single_gpu.yaml
+# or, the released 110M recipe on 8 GPUs:
+torchrun --nproc_per_node=8 rna_gen/rna_gen_training.py --config configs/train_110M.yaml
+```
+
+Prefer to build the dataset from Rfam yourself instead of downloading it:
+
+```bash
+python data_processing/download_rfam.py --stage seed-all   # 93k sequences, ~1 min
+# (--stage full-all rebuilds the ~4M-sequence set; needs Infernal and hours)
+python data_processing/rfam_data_preprocessing.py --stage all
+python data_processing/training_data_preparation.py \
+    --config configs/train_single_gpu.yaml --create-lookup
+```
+
+To check the whole pipeline first (~2 min, tiny model, no W&B account needed):
+
+```bash
+python rna_gen/rna_gen_training.py --config configs/train_smoke.yaml
+```
+
+Dataset page: https://huggingface.co/datasets/MasterYster/semRfam — 3,978,586
+sequences across 4,028 Rfam families, with the exact family-level split used for
+the released model.
+
+Checkpoints land in `training.output_dir` and are directly loadable by
+`inference/rna_sequence_generator.py`. `configs/train_110M.yaml` is the exact
+configuration the released checkpoint was trained with, recovered from the
+checkpoint itself.
+
+**Note on the vocabulary:** `training_data/processed/vocabulary_analysis/unified_vocabulary.json`
+is the vocabulary the released model uses. Keep it when fine-tuning or resuming
+from `yakRNA_110M.pt`; rebuilding it from your own data assigns different token
+ids and makes that checkpoint incompatible.
 
 ## System Requirements
 
@@ -180,6 +250,10 @@ yakRNA/
 - **GPU**: NVIDIA GPU with CUDA support (recommended)
 - **RAM**: 16GB+
 - **Python**: 3.10
+
+For training: a 24GB GPU trains the 110M architecture at batch 16; the released
+model used 8 GPUs for 50,000 steps. Rebuilding the full Rfam dataset needs
+~20GB of disk and Infernal (`cmalign`).
 
 ## License
 
